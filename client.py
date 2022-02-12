@@ -5,7 +5,13 @@ s = socket.socket()
 ip=(popen("hostname -I | awk '{print $1}'").read()).strip()
 port = 15450			
 
-s.connect((ip, port))
+for i in range(100):
+    temip=ip[:-1]+str(i)
+    try:
+        s.connect((temip, port))
+        break
+    except (ConnectionRefusedError,OSError):
+        pass
 
 while True:
     cmd=s.recv(1024).decode()
